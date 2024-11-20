@@ -42,14 +42,14 @@ class ActionDataProcessorXSD(QAction):
         self.triggered.connect(self.main_form.action_open_data_processor_xsd)
 
 
-class ActionBoberINI(QAction):
+class ActionHamsterINI(QAction):
     def __init__(self, parent, main_form):
-        super(ActionBoberINI, self).__init__(parent)
+        super(ActionHamsterINI, self).__init__(parent)
         self.main_form = main_form
         self.setObjectName("action_bober_ini")
         # self.setIcon()
-        self.setText("Bober")
-        self.triggered.connect(self.main_form.action_open_bober_ini)
+        self.setText("Хомяк")
+        self.triggered.connect(self.main_form.action_open_hamster_ini)
 
 
 class ActionWallpapers(QAction):

@@ -62,7 +62,7 @@ class UiMainWindow(QtWidgets.QMainWindow):
         self.menu_apps.addAction(ActionCommandINFA(self, self))
         self.menu_apps.addAction(ActionDataProcessorXSD(self, self))
         self.menu_apps.addSeparator()
-        self.menu_apps.addAction(ActionBoberINI(self, self))
+        self.menu_apps.addAction(ActionHamsterINI(self, self))
         # self.menu_apps.addSeparator()
         # self.menu_apps.addAction(ActionWallpapers(self, self))
         self.menubar.addAction(self.menu_file.menuAction())
@@ -95,8 +95,8 @@ class UiMainWindow(QtWidgets.QMainWindow):
         self.mdiArea.addSubWindow(self.sub_form_formated_xsd)
         self.sub_form_formated_xsd.show()
 
-    def action_open_bober_ini(self):
-        print("open_bober_ini")
+    def action_open_hamster_ini(self):
+        print("action_open_hamster_ini")
 
     def action_open_wallpapers(self):
         print("open_wallpapers")
