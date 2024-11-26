@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import (
     QPushButton, QSizePolicy
 )
 
-from APP.generator_cmd.UI.forms import UiDialogText
+from APP._arhive.generator_cmd.UI.forms import UiDialogText
 
 
 class ViewButton(QPushButton):

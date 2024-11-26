@@ -1,13 +1,9 @@
-import os
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
 
-from APP.generator_cmd.UI.buttons import *
-from APP.generator_cmd.UI.controls import UiGroupBox, UiHBoxLayout
-from APP.generator_cmd.UI.inputs import UiLineEdit, UiLabelIcon
-from APP.generator_cmd.core import StringCommand
-from settings import PATH_APP
+from APP._arhive.generator_cmd.UI.controls import UiGroupBox, UiHBoxLayout
+from APP._arhive.generator_cmd.UI.inputs import UiLineEdit, UiLabelIcon
+from APP._arhive.generator_cmd.core import StringCommand
 
 
 def get_index(array, param):
@@ -35,7 +31,7 @@ class UiSubMainWindowCommandInfa(QWidget):
         self._w = w
         self._h = h
 
-        self.template_commands = StringCommand(PATH_APP)
+        self.template_commands = StringCommand(self.app.settings.dir_settings)
 
         self._option_dmn = self.template_commands.option_dmn
         self._option_dis = self.template_commands.option_dis

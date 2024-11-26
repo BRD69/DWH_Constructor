@@ -6,12 +6,13 @@ class StringCommand:
     def __init__(self, path):
         self._config = configparser.ConfigParser()
         self._path = path
+        self._name_file_config = 'pattern_cmd.ini'
         self._symbol_split = '_&_'
         self._save_load_value = ["start_job",
                                  "start_prod_app",
                                  "stop_prod_app",
                                  "start_prod_wf",
-                                 "start_test_wf",]
+                                 "start_test_wf", ]
 
         self.option_dmn = "_option_dmn"
         self.option_dis = "_option_dis"
@@ -135,7 +136,7 @@ class StringCommand:
                 _config_save[key] = f'{self._symbol_split}'.join(value)
         self._config[StringCommand.__name__] = _config_save
 
-        with open(os.path.join(self._path, 'command.ini'), 'w') as configfile:
+        with open(os.path.join(self._path, self._name_file_config), 'w') as configfile:
             configfile.write(f'# Символ разрыва: {self._symbol_split}\n')
             configfile.write('# Использовать следующие ключи опции:\n')
             configfile.write('# _option_dmn - DomainName\n')
@@ -150,8 +151,8 @@ class StringCommand:
         self.save_command()
 
     def load_command(self):
-        if os.path.isfile(os.path.join(self._path, 'command.ini')):
-            self._config.read(os.path.join(self._path, 'command.ini'))
+        if os.path.isfile(os.path.join(self._path, self._name_file_config)):
+            self._config.read(os.path.join(self._path, self._name_file_config))
             for key, value in self.__dict__.items():
                 if key in self._save_load_value:
                     try:
@@ -169,4 +170,3 @@ if __name__ == '__main__':
     sc = StringCommand(os.getcwd())
     sc.load_command()
     print(sc.start_job)
-

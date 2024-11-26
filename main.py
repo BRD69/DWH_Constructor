@@ -40,6 +40,7 @@ class AppMainWindow(QMainWindow):
 
         # НАСТРОЙКИ ПРИЛОЖЕНИЯ
         self.settings = settings.Settings()
+        self.test_startapp = self.settings.test
         self.ui_icon = _icon_logo  # иконка приложения
         self.ui_title = self.settings.title  # заголовок приложения
         self.ui_width = self.settings.screen_width  # размеры приложения (ширина)

@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 
 from APP.formated_xsd.sub_main import UiFormatedXSDForm
-from APP.generator_cmd.sub_main import UiSubMainWindowCommandInfa
+from APP.command_infa.sub_main import UiSubMainWindowCommandInfa
 from APP.generator_sql.sub_main import UiSQLSubForm
 from UI.widgets.actions import *
 
@@ -73,9 +73,9 @@ class UiMainWindow(QtWidgets.QMainWindow):
     def _connect_sub_form(self):
         print("_connect_sub_form")
         # self.sub_form_sql = UiSQLSubForm(self.mdiArea, self)
-        # self.sub_form_command_infa = UiSubMainWindowCommandInfa(self.mdiArea, self)
+        self.sub_form_command_infa = UiSubMainWindowCommandInfa(self.mdiArea, self)
         # self.sub_form_formated_xsd = UiFormatedXSDForm(self.mdiArea, self)
-        # self.mdiArea.addSubWindow(self.sub_form_formated_xsd)
+        self.mdiArea.addSubWindow(self.sub_form_command_infa)
 
     def action_close(self):
         self.close()
