@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
 
+from APP._arhive.generator_cmd.UI.buttons import ViewButton, CopyButton
 from APP._arhive.generator_cmd.UI.controls import UiGroupBox, UiHBoxLayout
 from APP._arhive.generator_cmd.UI.inputs import UiLineEdit, UiLabelIcon
 from APP._arhive.generator_cmd.core import StringCommand

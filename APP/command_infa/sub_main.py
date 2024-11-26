@@ -1,6 +1,9 @@
+import webbrowser
+
 import pyperclip
 import subprocess
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QWidget, QDialogButtonBox, QFileDialog, QRadioButton
 
 from APP.command_infa.UI.buttons import UiButtonsViewCopy, UiButtonsHelp, UiButtonsRun, UiButtonsOpenDialog
@@ -31,6 +34,7 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         self.app = main_window.app
         self.main_window = main_window
+        self.timer = QTimer(self)
 
         self.mode = ModeButton
         self.settings_cmd = SettingsCMD(self.app.settings.dir_settings)
@@ -44,7 +48,7 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         """ФУНКЦИИ ЗАГРУЗКИ ИНТЕРФЕЙСА И ДАННЫХ"""
         self._setup_ui()
-        # self._load_style_ui()
+        self._load_style_ui()
         self._load_data_ui()
         self._connect_events()
 
@@ -280,13 +284,14 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         self.horizontalLayout_6.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
         self.horizontalLayout_6.setContentsMargins(3, 3, 3, 3)
-        self.horizontalLayout_6.setSpacing(10)
+        self.horizontalLayout_6.setSpacing(0)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
 
         self.cb_sql_job_wait = QtWidgets.QCheckBox(self.frame_sql_job_title)
         self.cb_sql_job_wait.setObjectName("cb_sql_job_wait")
-        self.horizontalLayout_6.addWidget(self.cb_sql_job_wait)
-
+        self.horizontalLayout_8.addWidget(self.cb_sql_job_wait)
+        spacer_item_5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_8.addItem(spacer_item_5)
         # Кнопки SQL Job ->
         self.btn_1_sql_job_view = UiButtonsViewCopy(self.frame_sql_job_btn,
                                                     name='1_sql_job',
@@ -349,22 +354,23 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         self.horizontalLayout_7.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
         self.horizontalLayout_7.setContentsMargins(3, 3, 3, 3)
-        self.horizontalLayout_7.setSpacing(10)
+        self.horizontalLayout_7.setSpacing(0)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+
         self.cb_app_wait = QtWidgets.QCheckBox(self.frame_app_title)
         self.cb_app_wait.setObjectName("cb_app_wait")
-        self.horizontalLayout_7.addWidget(self.cb_app_wait)
+        self.horizontalLayout_9.addWidget(self.cb_app_wait)
 
         self.radiobutton_app_start = QRadioButton("START")
         self.radiobutton_app_start.setChecked(True)
         self.radiobutton_app_start.app = "START"
         # radiobutton.toggled.connect(self.onClicked)
-        self.horizontalLayout_7.addWidget(self.radiobutton_app_start)
+        self.horizontalLayout_9.addWidget(self.radiobutton_app_start)
 
         self.radiobutton_app_stop = QRadioButton("STOP")
         self.radiobutton_app_stop.app = "STOP"
         # radiobutton.toggled.connect(self.onClicked)
-        self.horizontalLayout_7.addWidget(self.radiobutton_app_stop)
+        self.horizontalLayout_9.addWidget(self.radiobutton_app_stop)
 
         # Кнопки Application ->
         self.btn_1_app_run = UiButtonsRun(self.frame_app_btn,
@@ -433,24 +439,24 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         self.horizontalLayout_13.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
         self.horizontalLayout_13.setContentsMargins(3, 3, 3, 3)
-        self.horizontalLayout_13.setSpacing(10)
+        self.horizontalLayout_13.setSpacing(0)
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
 
         self.cb_wf_wait = QtWidgets.QCheckBox(self.frame_wf_title)
         self.cb_wf_wait.setObjectName("cb_wf_wait")
-        self.horizontalLayout_13.addWidget(self.cb_wf_wait)
+        self.horizontalLayout_12.addWidget(self.cb_wf_wait)
 
         # QRadioButton тест или прод
         self.radiobutton_wf_test = QRadioButton("ТЕСТ")
         self.radiobutton_wf_test.setChecked(True)
         self.radiobutton_wf_test.mode = "ТЕСТ"
         # radiobutton.toggled.connect(self.onClicked)
-        self.horizontalLayout_13.addWidget(self.radiobutton_wf_test)
+        self.horizontalLayout_12.addWidget(self.radiobutton_wf_test)
 
         self.radiobutton_wf_prod = QRadioButton("ПРОД")
         self.radiobutton_wf_prod.mode = "ПРОД"
         # radiobutton.toggled.connect(self.onClicked)
-        self.horizontalLayout_13.addWidget(self.radiobutton_wf_prod)
+        self.horizontalLayout_12.addWidget(self.radiobutton_wf_prod)
 
         # Кнопки Workflow ->
         self.btn_1_wf_run = UiButtonsRun(self.frame_wf_btn,
@@ -664,6 +670,8 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.toolBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self)
 
+        self.update()
+
     def _retranslate_ui(self):
         _translate = QtCore.QCoreApplication.translate
         self.lbl_text_DMN.setText(_translate("command_infa_form", "DMN:"))
@@ -692,6 +700,14 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.edit_settings_auth_prod_password.setPlaceholderText(_translate("command_infa_form", "Пароль"))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_settings), _translate("command_infa_form", "Настройки"))
 
+    def _load_style_ui(self):
+        # Сделано чтобы одновить положение кнопок после формирования всей формы
+        # Видимо формировать все стили надо делать уже после формирования всей формы и элементов на форме
+        # По это костыль, в интернете не нашел решения
+        self.frame_1_sql_job.set_orig_style()
+        self.frame_2_app.set_orig_style()
+        self.frame_3_wf.set_orig_style()
+
     def _load_data_ui(self):
         # ПРОВЕРКА ЗАПОЛНЕНИЯ НАСТРОЕК
         self.checking_settings()
@@ -716,10 +732,12 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.btn_1_app_run.clicked.connect(lambda: self.clicked_event_app_mode(mode=self.mode.run))
         self.btn_2_app_view.clicked.connect(lambda: self.clicked_event_app_mode(mode=self.mode.view))
         self.btn_3_app_copy.clicked.connect(lambda: self.clicked_event_app_mode(mode=self.mode.copy))
+        self.btn_4_app_help.clicked.connect(self.clicked_event_app_help)
 
         self.btn_1_wf_run.clicked.connect(lambda: self.clicked_event_wf_mode(mode=self.mode.run))
         self.btn_2_wf_view.clicked.connect(lambda: self.clicked_event_wf_mode(mode=self.mode.view))
         self.btn_3_wf_copy.clicked.connect(lambda: self.clicked_event_wf_mode(mode=self.mode.copy))
+        self.btn_4_wf_help.clicked.connect(self.clicked_event_wf_help)
 
         # КНОПКИ ОТКРЫТИЯ ДИАЛОГА ВЫБОРА ФАЙЛА
         self.btn_settings_sql_open_dialog.clicked.connect(self.clicked_event_sql_open_dialog)
@@ -779,6 +797,16 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.settings_cmd.clear_command()
         self.main_window.statusbar.showMessage("Настройки очищены", 5000)
         self._load_data_ui()
+
+    def set_style_when_copying(self, frame):
+        frame.set_copy_style()
+
+        self.timer.timeout.connect(lambda: self._signal_timer(frame))
+        self.timer.start(150)
+
+    def _signal_timer(self, frame):
+        frame.set_orig_style()
+        self.timer.stop()
 
     def change_event_auth_test_user(self):
         self.settings_cmd.set_user_test(self.edit_settings_auth_test_user.text())
@@ -847,13 +875,16 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         if mode == self.mode.copy:
             pyperclip.copy(text_command)
+            self.set_style_when_copying(self.frame_1_sql_job)
         else:
             dialog = UiDialogText(text=text_command, title="SQL Agent")
             dialog.setModal(True)
             dialog.exec_()
 
     def clicked_event_sql_job_help(self):
-        pass
+        webbrowser.open(
+            'https://learn.microsoft.com/en-us/powershell/module/sqlserver/get-sqlagentjob?view=sqlserver-ps'
+        )
 
     def clicked_event_app_mode(self, mode):
         list_command = []
@@ -887,12 +918,18 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         if mode == self.mode.copy:
             pyperclip.copy(text_command)
+            self.set_style_when_copying(self.frame_2_app)
         elif mode == self.mode.run:
             self.run_command(text_command, operation="APP")
         else:
             dialog = UiDialogText(text=text_command, title="Application")
             dialog.setModal(True)
             dialog.exec_()
+
+    @staticmethod
+    def clicked_event_app_help():
+        webbrowser.open(
+            'https://docs.informatica.com/data-engineering/common-content-for-data-engineering/10-4-1/command-reference/infacmd-dis-command-reference/startapplication.html')
 
     def clicked_event_wf_mode(self, mode):
         list_command = []
@@ -934,9 +971,15 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         if mode == self.mode.copy:
             pyperclip.copy(text_command)
+            self.set_style_when_copying(self.frame_3_wf)
         elif mode == self.mode.run:
             self.run_command(text_command, operation="WF")
         else:
             dialog = UiDialogText(text=text_command, title="Workflow")
             dialog.setModal(True)
             dialog.exec_()
+
+    @staticmethod
+    def clicked_event_wf_help():
+        webbrowser.open(
+            'https://docs.informatica.com/data-engineering/common-content-for-data-engineering/10-4-1/command-reference/infacmd-wfs-command-reference/startworkflow.html')

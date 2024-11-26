@@ -47,3 +47,16 @@ class UiFrame(QFrame):
                                "{\n"
                                "    border: none;\n"
                                "}")
+        self.update()
+
+    def set_copy_style(self):
+        self.setStyleSheet(f"#{self.objectName()}"
+                           "{\n"
+                           "    background-color: rgba(149, 222, 111, 128);\n"
+                           "    border: 1px solid rgb(137, 137, 137);\n"
+                           "    border-radius: 5px;\n"
+                           "}")
+        self.update()
+
+    def set_orig_style(self):
+        self._load_style_ui()
