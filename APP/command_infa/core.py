@@ -2,6 +2,7 @@ import configparser
 import os
 from cryptography.fernet import Fernet
 
+from APP.common import SaveLoadConfig
 from settings import Settings
 
 
@@ -13,7 +14,6 @@ class ModeButton:
 
 class SettingsCMD:
     def __init__(self, path):
-        self._config = configparser.ConfigParser()
         self._settings = Settings()
         self._path = path
         self._name_file_config = 'settings_cmd.ini'
@@ -23,6 +23,8 @@ class SettingsCMD:
                                  "password_test",
                                  "user_prod",
                                  "password_prod", ]
+        self._saver_loader = None
+
         self.path_sql_agent = ''
         self.path_informatica = ''
         self.user_test = ''
@@ -89,28 +91,26 @@ class SettingsCMD:
     def get_password_prod(self):
         return self.get_decrypted_text(self.password_prod)
 
-    def save_command(self):
-        _config_save = {}
-        for key, value in self.__dict__.items():
-            if key in self._save_load_value:
-                _config_save[key] = value
-        self._config[SettingsCMD.__name__] = _config_save
+    def get_name_class(self):
+        return SettingsCMD.__name__
 
-        with open(os.path.join(self._path, self._name_file_config), 'w') as configfile:
-            self._config.write(configfile)
+    def save_command(self):
+        self._saver_loader = SaveLoadConfig(
+            obj_class=self,
+            save_values=self._save_load_value,
+            path=self._path,
+            file_name=self._name_file_config,
+        )
+        self._saver_loader.save()
 
     def load_command(self):
-        if os.path.isfile(os.path.join(self._path, self._name_file_config)):
-            self._config.read(os.path.join(self._path, self._name_file_config))
-            for key, value in self.__dict__.items():
-                if key in self._save_load_value:
-                    try:
-                        _value_command = self._config.get(SettingsCMD.__name__, key)
-                        setattr(self, key, _value_command)
-                    except configparser.NoOptionError as e:
-                        continue
-        else:
-            self.save_command()
+        self._saver_loader = SaveLoadConfig(
+            obj_class=self,
+            save_values=self._save_load_value,
+            path=self._path,
+            file_name=self._name_file_config,
+        )
+        self._saver_loader.load()
 
     def clear_command(self):
         self.path_sql_agent = ''
@@ -169,9 +169,7 @@ class TemplatesCMD:
             f"-ServiceName {self.option_dis}",
             f"-Application {self.option_app}",
             f"-un {self.option_user_name}",
-            # f"-un ipc_user_p",
             f"-pd {self.option_user_pass} ",
-            # f"-pd ipc725p ",
             f"-Wait {self.option_wait}",
         )
         self.workflow = (
@@ -183,8 +181,6 @@ class TemplatesCMD:
             f"-Workflow {self.option_wf}",
             f"-ParameterSet {self.option_ps}",
             f"-sdn Native",
-            # f"-un infa_user",
-            # f"-pd ipc725",
             f"-un {self.option_user_name}",
             f"-pd {self.option_user_pass}",
             f"-Wait {self.option_wait}",

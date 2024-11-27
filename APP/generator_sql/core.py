@@ -1,3 +1,9 @@
+import configparser
+import os
+
+from APP.common import SaveLoadConfig
+
+
 class Transliterator:
     def __init__(self):
         self.cyrillic = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
@@ -82,7 +88,21 @@ class TableSQLDataObject:
     Класс data.object
     """
 
-    def __init__(self):
+    def __init__(self, path):
+        self._config = configparser.ConfigParser()
+        self._path = path
+        self._name_file_config = 'sql_data_object.ini'
+        self._save_load_value = ["scope",
+                                 "object",
+                                 "type",
+                                 "source_system",
+                                 "source_type",
+                                 "domain",
+                                 "template",
+                                 "dmt_view_source",
+                                 "comment", ]
+        self._saver_loader = None
+
         self.scope = PredefinedValues.scope_values[0]
         self.object = ""
         self.type = PredefinedValues.type_values[0]
@@ -92,6 +112,8 @@ class TableSQLDataObject:
         self.template = "base"
         self.dmt_view_source = "ods"
         self.comment = ""
+
+        self.load()
 
     @staticmethod
     def get_scopes():
@@ -103,6 +125,30 @@ class TableSQLDataObject:
 
     def get_file_name(self):
         return f"{self.scope}_{self.source_system}_{self.object}"
+
+    def get_name_class(self):
+        return TableSQLDataObject.__name__
+
+    def get_load_value(self):
+        return self._save_load_value
+
+    def save(self):
+        self._saver_loader = SaveLoadConfig(
+            obj_class=self,
+            save_values=self._save_load_value,
+            path=self._path,
+            file_name=self._name_file_config,
+        )
+        self._saver_loader.save()
+
+    def load(self):
+        self._saver_loader = SaveLoadConfig(
+            obj_class=self,
+            save_values=self._save_load_value,
+            path=self._path,
+            file_name=self._name_file_config,
+        )
+        self._saver_loader.load()
 
 
 class TableSQLDataObjectColumn:

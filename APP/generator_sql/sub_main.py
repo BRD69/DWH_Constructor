@@ -20,7 +20,7 @@ class UiSQLSubForm(QWidget):
 
         self.transliterator = Transliterator()
 
-        self.sql_data_object = TableSQLDataObject()
+        self.sql_data_object = TableSQLDataObject(path=self.app.settings.dir_udata)
 
         self._title = title
         self._w = w
@@ -102,6 +102,10 @@ class UiSQLSubForm(QWidget):
 
     def _load_data(self):
         self.tableWidget_data.add_row(None)
+
+    def closeEvent(self, a0):
+        self.sql_data_object.save()
+        self.main_window.statusbar.showMessage("Свойства и значения - сохранены", 5000)
 
     def clear_data(self):
         msg = QMessageBox()

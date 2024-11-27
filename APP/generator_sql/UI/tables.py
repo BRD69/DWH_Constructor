@@ -71,30 +71,35 @@ class UiTableWidgetObject(QTableWidget):
 
     def _add_rows(self):
         for key in enumerate(self.sql_data_object.__dict__.keys()):
-            row = self.rowCount()
-            self.insertRow(row)
-
             index, name_field = key[0], key[1]
-            value = self.sql_data_object.__dict__[name_field]
+            if name_field in self.sql_data_object.get_load_value():
+                row = self.rowCount()
+                self.insertRow(row)
 
-            item_field0 = QtWidgets.QTableWidgetItem(name_field)
-            item_field0.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsEnabled)
-            self.setItem(row, 0, item_field0)
+                value = self.sql_data_object.__dict__[name_field]
 
-            if name_field == "scope":
-                combo_box = self.create_combo_box(name="scope", values=self.scopes,
-                                                  name_field=name_field, row=row, column=1)
-                self.setCellWidget(row, 1, combo_box)
-            elif name_field == "type":
-                combo_box = self.create_combo_box(name="type", values=self.types,
-                                                  name_field=name_field, row=row, column=1)
-                self.setCellWidget(row, 1, combo_box)
-            else:
-                item_value1 = UiTableWidgetItemObject(value=value,
+                item_field0 = QtWidgets.QTableWidgetItem(name_field)
+                item_field0.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsEnabled)
+                self.setItem(row, 0, item_field0)
+
+                if name_field == "scope":
+                    combo_box = self.create_combo_box(name="scope", values=self.scopes,
                                                       name_field=name_field, row=row, column=1)
-                if name_field == "template" or name_field == "dmt_view_source":
-                    item_value1.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDragEnabled)
-                self.setItem(row, 1, item_value1)
+                    combo_box.set_current_index(list(self.scopes).index(value))
+                    self.setCellWidget(row, 1, combo_box)
+                elif name_field == "type":
+                    combo_box = self.create_combo_box(name="type", values=self.types,
+                                                      name_field=name_field, row=row, column=1)
+                    combo_box.set_current_index(list(self.types).index(value))
+                    self.setCellWidget(row, 1, combo_box)
+                else:
+                    item_value1 = UiTableWidgetItemObject(value=value,
+                                                          name_field=name_field, row=row, column=1)
+                    if name_field == "template" or name_field == "dmt_view_source":
+                        item_value1.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDragEnabled)
+                    self.setItem(row, 1, item_value1)
+            else:
+                continue
 
     def _connect_event(self):
         self.itemChanged.connect(self._change_item)
@@ -110,7 +115,6 @@ class UiTableWidgetObject(QTableWidget):
 
     def _combo_box_current_index_change(self, combo_box):
         setattr(self.sql_data_object, combo_box.name_field, combo_box.itemText(combo_box.currentIndex()))
-        print(self.sql_data_object.__dict__)
 
 
 class UiTableWidgetData(QTableWidget):

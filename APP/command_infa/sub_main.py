@@ -37,8 +37,8 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.timer = QTimer(self)
 
         self.mode = ModeButton
-        self.settings_cmd = SettingsCMD(self.app.settings.dir_udata)
-        self.templates_cmd = TemplatesCMD(self.app.settings.dir_settings)
+        self.settings_cmd = SettingsCMD(path=self.app.settings.dir_udata)
+        self.templates_cmd = TemplatesCMD(path=self.app.settings.dir_settings)
 
         self.is_check_settings = False
 
