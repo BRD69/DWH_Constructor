@@ -42,13 +42,16 @@ class SettingsCMD:
             return ''
 
     def get_decrypted_text(self, text):
-        if text:
-            cipher = Fernet(self._settings.secret_key_byte)
-            text_byte = bytes(text, 'utf-8')
-            decrypted_text = cipher.decrypt(text_byte)
-            return decrypted_text.decode('utf-8')
-        else:
-            return ''
+        try:
+            if text:
+                cipher = Fernet(self._settings.secret_key_byte)
+                text_byte = bytes(text, 'utf-8')
+                decrypted_text = cipher.decrypt(text_byte)
+                return decrypted_text.decode('utf-8')
+            else:
+                return ''
+        except Exception as e:
+            return str(e)
 
     def set_path_sql_agent(self, value):
         self.path_sql_agent = value
@@ -66,7 +69,7 @@ class SettingsCMD:
         self.user_prod = value
 
     def set_password_prod(self, value):
-        self.password_prod = value
+        self.password_prod = self.get_encrypted_text(value)
 
     def get_path_sql_agent(self):
         return self.path_sql_agent
@@ -84,7 +87,7 @@ class SettingsCMD:
         return self.user_prod
 
     def get_password_prod(self):
-        return self.password_prod
+        return self.get_decrypted_text(self.password_prod)
 
     def save_command(self):
         _config_save = {}

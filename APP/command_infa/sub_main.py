@@ -37,7 +37,7 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.timer = QTimer(self)
 
         self.mode = ModeButton
-        self.settings_cmd = SettingsCMD(self.app.settings.dir_settings)
+        self.settings_cmd = SettingsCMD(self.app.settings.dir_udata)
         self.templates_cmd = TemplatesCMD(self.app.settings.dir_settings)
 
         self.is_check_settings = False
@@ -792,6 +792,7 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.main_window.statusbar.showMessage("Настройки сохранены", 5000)
         self.change_settings_title()
         self._load_data_ui()
+        # self.toolBox.setCurrentIndex(self.toolBox.indexOf(self.page_command))
 
     def clear_settings(self):
         self.settings_cmd.clear_command()
@@ -881,7 +882,8 @@ class UiSubMainWindowCommandInfa(QWidget):
             dialog.setModal(True)
             dialog.exec_()
 
-    def clicked_event_sql_job_help(self):
+    @staticmethod
+    def clicked_event_sql_job_help():
         webbrowser.open(
             'https://learn.microsoft.com/en-us/powershell/module/sqlserver/get-sqlagentjob?view=sqlserver-ps'
         )
