@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QLabel, QMessageBox, QFileDialog
 
 from APP.generator_sql.UI.actions import *
-from APP.generator_sql.UI.forms import UiDialogViewText
+from APP.generator_sql.UI.forms import UiDialogViewText, UiDialogSQLRun
 from APP.generator_sql.UI.tables import UiTableWidgetObject, UiTableWidgetData
 from APP.generator_sql.common import get_text_null, get_length, get_state
 from APP.generator_sql.core import TableSQLDataObject, TableSQLDataObjectColumn, Transliterator
@@ -96,6 +96,7 @@ class UiSQLSubForm(QWidget):
         self.toolBar_GeneratorCMD.addWidget(QLabel("SQL:"))
         self.toolBar_GeneratorCMD.addAction(ActionsSQLSave(self, self.sql_save))
         self.toolBar_GeneratorCMD.addAction(ActionsSQLView(self, self.sql_view))
+        self.toolBar_GeneratorCMD.addAction(ActionsSQLRun(self, self.sql_run))
         self.toolBar_GeneratorCMD.addSeparator()
         self.toolBar_GeneratorCMD.addWidget(QLabel("MD5:"))
         self.toolBar_GeneratorCMD.addAction(ActionsMD5View(self, self.md5_view))
@@ -160,6 +161,13 @@ class UiSQLSubForm(QWidget):
         if result == 1:
             pyperclip.copy(sql_text)
             self.main_window.statusbar.showMessage(f"SQL - скопирован", 5000)
+
+    def sql_run(self):
+        sql_query = self.get_sql_text()
+        dialog = UiDialogSQLRun(self, sql_query, self.main_window)
+        dialog.setModal(True)
+        dialog.exec()
+
 
     def get_sql_text(self):
         sql_object = self.sql_data_object

@@ -89,7 +89,6 @@ class TableSQLDataObject:
     """
 
     def __init__(self, path):
-        self._config = configparser.ConfigParser()
         self._path = path
         self._name_file_config = 'sql_data_object.ini'
         self._save_load_value = ["scope",
@@ -193,6 +192,61 @@ class TableSQLDataObjectColumn:
     @staticmethod
     def get_values_type(type_str):
         return ValuesDataType.get_values_type(type_str)
+
+
+class SQLConnect:
+    def __init__(self, path):
+        self._path = path
+        self._name_file_config = 'sql_connect.ini'
+        self._save_load_value = ["server",
+                                 "database",
+                                 "driver",
+                                 "trusted_connection",
+                                 ]
+        self._saver_loader = None
+
+        self.server = ''
+        self.database = ''
+        self.driver = '{ODBC Driver 17 for SQL Server}'
+        self.trusted_connection = self.get_str_trusted_connection(True)
+
+        self.load()
+
+    @staticmethod
+    def get_name_class():
+        return SQLConnect.__name__
+
+    def save(self):
+        self._saver_loader = SaveLoadConfig(
+            obj_class=self,
+            save_values=self._save_load_value,
+            path=self._path,
+            file_name=self._name_file_config,
+        )
+        self._saver_loader.save()
+
+    def load(self):
+        self._saver_loader = SaveLoadConfig(
+            obj_class=self,
+            save_values=self._save_load_value,
+            path=self._path,
+            file_name=self._name_file_config,
+        )
+        self._saver_loader.load()
+
+    def set_server(self, server):
+        self.server = server
+
+    def set_database(self, database):
+        self.database = database
+
+    @staticmethod
+    def get_str_trusted_connection(value):
+        return 'yes' if value else 'no'
+
+    @staticmethod
+    def get_bool_trusted_connection(value):
+        return True if value == 'yes' else False
 
 
 if __name__ == '__main__':

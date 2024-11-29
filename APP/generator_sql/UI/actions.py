@@ -156,7 +156,7 @@ class ActionsSQLSave(QAction):
     def _setup_ui(self):
         self.setObjectName("sql_save")
         self.setIcon(QIcon(":/form_sql/static/imgs/sub_form_sql/sql_save.png"))
-        self.setText("Формат")
+        self.setText("Сохранить SQL")
         self.setStatusTip("Сохранить SQL")
 
     def _connect_event(self):
@@ -176,12 +176,33 @@ class ActionsSQLView(QAction):
     def _setup_ui(self):
         self.setObjectName("sql_save")
         self.setIcon(QIcon(":/form_sql/static/imgs/sub_form_sql/sql_view.png"))
-        self.setText("Формат")
+        self.setText("Сохранить SQL")
         self.setStatusTip("Сохранить SQL")
 
     def _connect_event(self):
         if self.event_triggered:
             self.triggered.connect(self.event_triggered)
+
+
+class ActionsSQLRun(QAction):
+    def __init__(self, parent, event_triggered=None):
+        super(ActionsSQLRun, self).__init__(parent)
+        self.parent = parent
+        self.event_triggered = event_triggered
+
+        self._setup_ui()
+        self._connect_event()
+
+    def _setup_ui(self):
+        self.setObjectName("sql_run")
+        self.setIcon(QIcon(":/form_sql/static/imgs/sub_form_sql/sql_run.png"))
+        self.setText("Выполнить SQL")
+        self.setStatusTip("Выполнить SQL")
+
+    def _connect_event(self):
+        if self.event_triggered:
+            self.triggered.connect(self.event_triggered)
+
 
 
 class ActionsMD5View(QAction):
