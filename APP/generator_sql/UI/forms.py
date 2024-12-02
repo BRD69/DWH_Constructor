@@ -46,6 +46,7 @@ class UiDialogSQLRun(QtWidgets.QDialog):
         self.main_window = main_window
         self.sql_connect = SQLConnect(path=self.app.settings.dir_udata)
         self.sql_query = sql_query
+        self.sql_connect_status = False
 
         self._setup_ui()
         self._load_style_ui()
@@ -269,6 +270,15 @@ class UiDialogSQLRun(QtWidgets.QDialog):
         self.btn_result_save.clicked.connect(self.clicked_event_btn_result_save)
         self.btn_result_copy.clicked.connect(self.clicked_event_btn_result_copy)
 
+    def set_connect_status(self, status=False):
+        self.sql_connect_status = status
+        if self.sql_connect_status:
+            self.label_status.setPixmap(self.active_connect_icon)
+            self.btn_run.setEnabled(True)
+        else:
+            self.label_status.setPixmap(self.no_connect_icon)
+            self.btn_run.setEnabled(False)
+
     def change_event_edit_server(self):
         self.sql_connect.set_server(self.edit_server.text())
 
@@ -276,7 +286,7 @@ class UiDialogSQLRun(QtWidgets.QDialog):
         self.sql_connect.set_database(self.edit_db.text())
 
     def clicked_event_btn_test_connect(self):
-        self.label_status.setPixmap(self.no_connect_icon)
+        self.set_connect_status(False)
         if self.app.settings.platform in self.app.settings.Platforms.windows:
             import pyodbc
             # Настройки подключения
@@ -284,28 +294,28 @@ class UiDialogSQLRun(QtWidgets.QDialog):
             database = self.sql_connect.database  # Имя базы данных
             trusted_connection = self.sql_connect.trusted_connection  # Используем доверительное подключение (доменная аутентификация)
             driver = self.sql_connect.driver
+            if server and database and trusted_connection and driver:
+                try:
+                    connection_string = f'DRIVER={driver};' \
+                                        f'SERVER={server};' \
+                                        f'DATABASE={database};' \
+                                        f'Trusted_Connection={trusted_connection};'
 
-            try:
-                connection_string = f'DRIVER={driver};' \
-                                    f'SERVER={server};' \
-                                    f'DATABASE={database};' \
-                                    f'Trusted_Connection={trusted_connection};'
+                    conn = pyodbc.connect(connection_string)
+                    cursor = conn.cursor()
 
-                conn = pyodbc.connect(connection_string)
-                cursor = conn.cursor()
+                    # Выполняем простой запрос для проверки соединения
+                    cursor.execute("SELECT 1;")
+                    result = cursor.fetchone()
 
-                # Выполняем простой запрос для проверки соединения
-                cursor.execute("SELECT 1;")
-                result = cursor.fetchone()
-
-                if result is not None:
-                    self.label_status.setPixmap(self.active_connect_icon)
-            except Exception as e:
-                self.label_status.setPixmap(self.no_connect_icon)
-                print(e)
-            finally:
-                if conn:
-                    conn.close()
+                    if result is not None:
+                        self.set_connect_status(True)
+                except Exception as e:
+                    self.label_status.setPixmap(self.no_connect_icon)
+                    print(e)
+                finally:
+                    if conn:
+                        conn.close()
 
     def clicked_event_btn_save_sql(self):
         self.sql_connect.save()

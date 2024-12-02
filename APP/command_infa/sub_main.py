@@ -1,3 +1,4 @@
+import os.path
 import webbrowser
 
 import pyperclip
@@ -45,6 +46,8 @@ class UiSubMainWindowCommandInfa(QWidget):
         self._title = title
         self._w = w
         self._h = h
+        self._sql_path_placeholder_text = os.path.join("C:", "SQLAgentJob", "IPC", "bat", "infacmd_proxy.bat")
+        self._infa_path_placeholder_text = os.path.join("C:", "Informatica", "10.4.1", "clients", "DeveloperClient", "infacmd", "infacmd.bat")
 
         """ФУНКЦИИ ЗАГРУЗКИ ИНТЕРФЕЙСА И ДАННЫХ"""
         self._setup_ui()
@@ -656,7 +659,7 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         self.buttonBox_settings = QtWidgets.QDialogButtonBox(self.page_settings)
         self.buttonBox_settings.setStandardButtons(
-            QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Reset | QtWidgets.QDialogButtonBox.Save)
+            QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Reset | QtWidgets.QDialogButtonBox.Save | QtWidgets.QDialogButtonBox.Help)
         self.buttonBox_settings.setObjectName("buttonBox_settings")
         self.verticalLayout_6.addWidget(self.buttonBox_settings)
 
@@ -687,11 +690,9 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.cb_wf_wait.setText(_translate("command_infa_form", "Wait"))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_command), _translate("command_infa_form", "Команды"))
         self.label_settings_sql_title.setText(_translate("command_infa_form", "SQL Agent Job"))
-        self.edit_settings_sql_path.setPlaceholderText(
-            _translate("command_infa_form", "C:\\SQLAgentJob\\IPC\\bat\\infacmd_proxy.bat"))
+        self.edit_settings_sql_path.setPlaceholderText(self._sql_path_placeholder_text)
         self.label_settings_infa_title.setText(_translate("command_infa_form", "Informatica"))
-        self.edit_settings_infa_path.setPlaceholderText(
-            _translate("command_infa_form", "C:\\Informatica\\10.4.1\\clients\\DeveloperClient\\infacmd\\infacmd.bat"))
+        self.edit_settings_infa_path.setPlaceholderText(self._infa_path_placeholder_text)
         self.label_settings_auth_test_title.setText(_translate("command_infa_form", "ТЕСТ"))
         self.edit_settings_auth_test_user.setPlaceholderText(_translate("command_infa_form", "Пользователь"))
         self.edit_settings_auth_test_password.setPlaceholderText(_translate("command_infa_form", "Пароль"))
@@ -750,6 +751,8 @@ class UiSubMainWindowCommandInfa(QWidget):
         # ПАНЕЛЬ СОХРАНЕНИЯ НАСТРОЕК
         self.buttonBox_settings.accepted.connect(self.save_settings)
         self.buttonBox_settings.button(QDialogButtonBox.Reset).clicked.connect(self.clear_settings)
+        self.buttonBox_settings.button(QDialogButtonBox.Help).clicked.connect(self.help_settings)
+        self.buttonBox_settings.button(QDialogButtonBox.Cancel).clicked.connect(self.cancel_settings)
 
         # НАСТРОЙКИ
         self.edit_settings_auth_test_user.textChanged.connect(self.change_event_auth_test_user)
@@ -797,6 +800,13 @@ class UiSubMainWindowCommandInfa(QWidget):
     def clear_settings(self):
         self.settings_cmd.clear_command()
         self.main_window.statusbar.showMessage("Настройки очищены", 5000)
+        self._load_data_ui()
+
+    def help_settings(self):
+        self.edit_settings_sql_path.setText(self._sql_path_placeholder_text)
+        self.edit_settings_infa_path.setText(self._infa_path_placeholder_text)
+
+    def cancel_settings(self):
         self._load_data_ui()
 
     def set_style_when_copying(self, frame):
