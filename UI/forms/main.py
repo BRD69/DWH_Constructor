@@ -13,6 +13,7 @@ class UiMainWindow(QtWidgets.QMainWindow):
         self.ui_title = app.ui_title
         self.ui_width = app.ui_width
         self.ui_height = app.ui_height
+        self.ui_icon = app.ui_icon
 
         self.sub_form_sql = None
         self.sub_form_command_infa = None
@@ -25,6 +26,7 @@ class UiMainWindow(QtWidgets.QMainWindow):
         self.setObjectName("MainWindow")
         self.resize(self.ui_width, self.ui_height)
         self.setWindowTitle(self.ui_title)
+        self.setWindowIcon(self.ui_icon)
 
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
