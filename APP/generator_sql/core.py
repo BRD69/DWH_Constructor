@@ -73,10 +73,13 @@ class ValuesDataType:
 
     @staticmethod
     def get_values_type(type_str):
-        if type_str in ['bigint', 'bit', 'datetime2', 'decimal', 'int', 'time', 'uniqueidentifier']:
+        if type_str in ['bigint', 'bit', 'datetime2', 'int', 'time', 'uniqueidentifier']:
             return ColumnFieldValues(length='null', precision='null', scale='null', is_nullable=2, is_key=0,
                                      default_value='null')
-        elif type_str == 'nvarchar':
+        elif type_str in ['decimal']:
+            return ColumnFieldValues(length='null', precision='30', scale='10', is_nullable=2, is_key=0,
+                                     default_value='null')
+        elif type_str in ['nvarchar']:
             return ColumnFieldValues(length='4000', precision='null', scale='null', is_nullable=2, is_key=0,
                                      default_value='null')
         else:
@@ -207,7 +210,7 @@ class SQLConnect:
 
         self.server = ''
         self.database = ''
-        self.driver = '{ODBC Driver 17 for SQL Server}'
+        self.driver = 'SQL Server'
         self.trusted_connection = self.get_str_trusted_connection(True)
 
         self.load()

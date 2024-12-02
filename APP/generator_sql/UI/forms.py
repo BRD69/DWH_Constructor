@@ -55,6 +55,7 @@ class UiDialogSQLRun(QtWidgets.QDialog):
     def _setup_ui(self):
         self.setObjectName("DialogSQLRun")
         self.resize(800, 600)
+        self.setWindowTitle("SQL Выполнить")
 
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
@@ -276,7 +277,7 @@ class UiDialogSQLRun(QtWidgets.QDialog):
 
     def clicked_event_btn_test_connect(self):
         self.label_status.setPixmap(self.no_connect_icon)
-        if self.app.settings.platform == self.app.settings.Platforms.windows:
+        if self.app.settings.platform in self.app.settings.Platforms.windows:
             import pyodbc
             # Настройки подключения
             server = self.sql_connect.server  # Имя сервера и экземпляр SQL Server
@@ -301,6 +302,7 @@ class UiDialogSQLRun(QtWidgets.QDialog):
                     self.label_status.setPixmap(self.active_connect_icon)
             except Exception as e:
                 self.label_status.setPixmap(self.no_connect_icon)
+                print(e)
             finally:
                 if conn:
                     conn.close()
@@ -312,7 +314,7 @@ class UiDialogSQLRun(QtWidgets.QDialog):
     def clicked_event_btn_run(self):
         self.text_edit_result.clear()
 
-        if self.app.settings.platform == self.app.settings.Platforms.windows:
+        if self.app.settings.platform in self.app.settings.Platforms.windows:
             import pyodbc
             # Настройки подключения
             server = self.sql_connect.server  # Имя сервера и экземпляр SQL Server
@@ -321,7 +323,10 @@ class UiDialogSQLRun(QtWidgets.QDialog):
             driver = self.sql_connect.driver
 
             # Строка подключения
-            connection_string = f'DRIVER={driver};SERVER={server};DATABASE={database};Trusted_Connection={trusted_connection};'
+            connection_string = f'DRIVER={driver};' \
+                                f'SERVER={server};' \
+                                f'DATABASE={database};' \
+                                f'Trusted_Connection={trusted_connection};'
 
             # Устанавливаем соединение
             conn = pyodbc.connect(connection_string)
