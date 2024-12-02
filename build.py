@@ -1,0 +1,10 @@
+import PyInstaller.__main__
+
+PyInstaller.__main__.run([
+    'main.py',
+    '--onefile',
+    '--windowed',
+    '--icon=icon512.ico',
+])
+
+# PyInstaller.__main__.run(['main.spec'])
