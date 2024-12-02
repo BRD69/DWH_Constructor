@@ -72,10 +72,10 @@ class UiMainWindow(QtWidgets.QMainWindow):
 
     def _connect_sub_form(self):
         print("_connect_sub_form")
-        self.sub_form_sql = UiSQLSubForm(self.mdiArea, self)
+        # self.sub_form_sql = UiSQLSubForm(self.mdiArea, self)
         # self.sub_form_command_infa = UiSubMainWindowCommandInfa(self.mdiArea, self)
         # self.sub_form_formated_xsd = UiFormatedXSDForm(self.mdiArea, self)
-        self.mdiArea.addSubWindow(self.sub_form_sql)
+        # self.mdiArea.addSubWindow(self.sub_form_sql)
 
     def action_close(self):
         self.close()
