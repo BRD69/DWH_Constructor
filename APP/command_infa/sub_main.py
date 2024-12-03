@@ -750,6 +750,10 @@ class UiSubMainWindowCommandInfa(QWidget):
         if not self.is_check_settings:
             self.toolBox.setCurrentIndex(self.toolBox.indexOf(self.page_settings))
 
+        # АКТИВНОСТЬ КНОПКИ ВЫПОЛНИТЬ КОМАНДУ
+        self.btn_1_app_run.setEnabled(os.path.isfile(self.settings_cmd.get_path_informatica()))
+        self.btn_1_wf_run.setEnabled(os.path.isfile(self.settings_cmd.get_path_informatica()))
+
         # НАСТРОЙКИ
         self.edit_settings_sql_path.setText(self.settings_cmd.get_path_sql_agent())
         self.edit_settings_infa_path.setText(self.settings_cmd.get_path_informatica())
