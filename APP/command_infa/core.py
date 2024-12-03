@@ -22,7 +22,10 @@ class SettingsCMD:
                                  "user_test",
                                  "password_test",
                                  "user_prod",
-                                 "password_prod", ]
+                                 "password_prod",
+                                 "link_adm_infa_test",
+                                 "link_adm_infa_prod",
+                                 ]
         self._saver_loader = None
 
         self.path_sql_agent = ''
@@ -31,6 +34,8 @@ class SettingsCMD:
         self.password_test = ''
         self.user_prod = ''
         self.password_prod = ''
+        self.link_adm_infa_test = 'https://spb99-etl-blt:8443/administrator/'
+        self.link_adm_infa_prod = 'https://spb99-etl-blp:8443/administrator/'
 
         self.load_command()
 
@@ -90,6 +95,12 @@ class SettingsCMD:
 
     def get_password_prod(self):
         return self.get_decrypted_text(self.password_prod)
+
+    def get_link_adm_infa_test(self):
+        return self.link_adm_infa_test
+
+    def get_link_adm_infa_prod(self):
+        return self.link_adm_infa_prod
 
     def get_name_class(self):
         return SettingsCMD.__name__

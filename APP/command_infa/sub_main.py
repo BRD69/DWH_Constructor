@@ -7,7 +7,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QWidget, QDialogButtonBox, QFileDialog, QRadioButton
 
-from APP.command_infa.UI.buttons import UiButtonsViewCopy, UiButtonsHelp, UiButtonsRun, UiButtonsOpenDialog
+from APP.command_infa.UI.buttons import UiButtonsViewCopy, UiButtonsHelp, UiButtonsRun, UiButtonsOpenDialog, \
+    UiButtonsInfa
 from APP.command_infa.UI.forms import UiDialogText
 from APP.command_infa.UI.inputs import UiLineEdit
 from APP.command_infa.UI.panels import UiLineFrame, UiFrame
@@ -69,9 +70,37 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.page_command = QtWidgets.QWidget()
         self.page_command.setGeometry(QtCore.QRect(0, 0, 800, 517))
         self.page_command.setObjectName("page_command")
+
         self.gridLayout = QtWidgets.QGridLayout(self.page_command)
         self.gridLayout.setContentsMargins(5, 5, 5, 5)
         self.gridLayout.setObjectName("gridLayout")
+
+        self.frame_btn_admin_monitor = UiFrame(self.page_command, name='btn_admin_monitor', border=True)
+        self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.frame_btn_admin_monitor)
+        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
+
+        self.frame_btn_monitor_left = UiFrame(self.frame_btn_admin_monitor, name='btn_monitor_left', border=False)
+
+        self.horizontalLayout_15 = QtWidgets.QHBoxLayout(self.frame_btn_monitor_left)
+        self.horizontalLayout_15.setContentsMargins(5, 5, 5, 5)
+        self.horizontalLayout_15.setSpacing(12)
+        self.horizontalLayout_15.setObjectName("horizontalLayout_15")
+
+        self.btn_infa_test = UiButtonsInfa(self.frame_btn_monitor_left, name='test')
+        self.horizontalLayout_15.addWidget(self.btn_infa_test)
+
+        self.line_0 = UiLineFrame(self.frame_btn_monitor_left, name='line_0', shape='V')
+        self.horizontalLayout_15.addWidget(self.line_0)
+
+        self.btn_infa_prod = UiButtonsInfa(self.frame_btn_monitor_left, name='prod')
+
+        self.horizontalLayout_15.addWidget(self.btn_infa_prod)
+        self.horizontalLayout_14.addWidget(self.frame_btn_monitor_left)
+
+        spacer_item = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_14.addItem(spacer_item)
+
+        self.gridLayout.addWidget(self.frame_btn_admin_monitor, 0, 0, 1, 1)
 
         self.groupbox_input = UiFrame(self.page_command, name='input', border=True)
 
@@ -241,7 +270,7 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         self.horizontalLayout_5.addWidget(self.edit_PS)
         self.verticalLayout_3.addWidget(self.frame5_PS)
-        self.gridLayout.addWidget(self.groupbox_input, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.groupbox_input, 1, 0, 1, 1)
         self.groupbox_output = QtWidgets.QGroupBox(self.page_command)
         self.groupbox_output.setStyleSheet("#groupbox_output{\n"
                                            "    border: 1px solid rgb(137, 137, 137);\n"
@@ -273,6 +302,7 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.label_sql_job_title = QtWidgets.QLabel(self.frame_sql_job_title)
         self.label_sql_job_title.setObjectName("label_sql_job_title")
         self.horizontalLayout_16.addWidget(self.label_sql_job_title)
+
         spacer_item = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_16.addItem(spacer_item)
 
@@ -293,8 +323,9 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.cb_sql_job_wait = QtWidgets.QCheckBox(self.frame_sql_job_title)
         self.cb_sql_job_wait.setObjectName("cb_sql_job_wait")
         self.horizontalLayout_8.addWidget(self.cb_sql_job_wait)
-        spacer_item_5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_8.addItem(spacer_item_5)
+
+        spacer_item = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_8.addItem(spacer_item)
         # Кнопки SQL Job ->
         self.btn_1_sql_job_view = UiButtonsViewCopy(self.frame_sql_job_btn,
                                                     name='1_sql_job',
@@ -343,8 +374,8 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.label_app_title.setObjectName("label_app_title")
         self.horizontalLayout_17.addWidget(self.label_app_title)
 
-        spacer_item_1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_17.addItem(spacer_item_1)
+        spacer_item = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_17.addItem(spacer_item)
 
         self.horizontalLayout_9.addWidget(self.frame_app_title)
 
@@ -428,8 +459,8 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.label_wf_title.setObjectName("label_wf_title")
         self.horizontalLayout_18.addWidget(self.label_wf_title)
 
-        spacer_item_2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_18.addItem(spacer_item_2)
+        spacer_item = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_18.addItem(spacer_item)
 
         self.horizontalLayout_12.addWidget(self.frame_wf_title)
 
@@ -490,8 +521,10 @@ class UiSubMainWindowCommandInfa(QWidget):
         self.horizontalLayout_12.addWidget(self.frame_wf_btn)
         self.verticalLayout.addWidget(self.frame_3_wf)
         self.gridLayout.addWidget(self.groupbox_output, 2, 0, 1, 1)
-        spacer_item_0 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacer_item_0, 3, 0, 1, 1)
+
+        spacer_item = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacer_item, 3, 0, 1, 1)
+
         self.text_edit_output_terminal = QtWidgets.QTextEdit(self.page_command)
         self.text_edit_output_terminal.setReadOnly(True)
         self.text_edit_output_terminal.setMaximumSize(QtCore.QSize(16777215, 60))
@@ -654,8 +687,9 @@ class UiSubMainWindowCommandInfa(QWidget):
 
         self.verticalLayout_5.addWidget(self.frame_3_settings_auth_prod)
         self.verticalLayout_6.addWidget(self.frame_2_settings_infa)
-        spacer_item_3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_6.addItem(spacer_item_3)
+
+        spacer_item = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_6.addItem(spacer_item)
 
         self.buttonBox_settings = QtWidgets.QDialogButtonBox(self.page_settings)
         self.buttonBox_settings.setStandardButtons(
@@ -747,6 +781,10 @@ class UiSubMainWindowCommandInfa(QWidget):
         # ИЗМЕНЕНИЕ ТЕКСТОВОГО ПОЛЯ
         self.edit_settings_sql_path.textChanged.connect(self.change_event_sql_path)
         self.edit_settings_infa_path.textChanged.connect(self.change_event_infa_path)
+
+        # КНОПКИ ОТКРЫТИЯ Informatica Administrator
+        self.btn_infa_test.clicked.connect(self.clicked_event_open_informatica_monitor_test)
+        self.btn_infa_prod.clicked.connect(self.clicked_event_open_informatica_monitor_prod)
 
         # ПАНЕЛЬ СОХРАНЕНИЯ НАСТРОЕК
         self.buttonBox_settings.accepted.connect(self.save_settings)
@@ -891,6 +929,14 @@ class UiSubMainWindowCommandInfa(QWidget):
             dialog = UiDialogText(text=text_command, title="SQL Agent")
             dialog.setModal(True)
             dialog.exec_()
+
+    def clicked_event_open_informatica_monitor_test(self):
+        link = f'{self.settings_cmd.get_link_adm_infa_test()}#monitoring_Monitoring_admin.monitoringServicesWS/'
+        webbrowser.open(link)
+
+    def clicked_event_open_informatica_monitor_prod(self):
+        link = f'{self.settings_cmd.get_link_adm_infa_prod()}#monitoring_Monitoring_admin.monitoringServicesWS/'
+        webbrowser.open(link)
 
     @staticmethod
     def clicked_event_sql_job_help():

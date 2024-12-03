@@ -180,3 +180,47 @@ class UiButtonsOpenDialog(QPushButton):
     def _connect_event(self):
         if self.event_click:
             self.clicked.connect(self.event_click)
+
+
+class UiButtonsInfa(QPushButton):
+    def __init__(self, parent, name='', event_click=None):
+        super(UiButtonsInfa, self).__init__(parent)
+        self.parent = parent
+        self.name = name
+        self.event_click = event_click
+
+        self.icon = QtGui.QIcon()
+        self.icon.addPixmap(QtGui.QPixmap(":/form_command_infa/static/imgs/sub_form_command_infa/INFA.png"),
+                            QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+        self._setup_ui()
+        self._load_style_ui()
+        self._connect_event()
+
+    def _setup_ui(self):
+        self.setObjectName(f'btn_infa_{self.name}')
+        self.setIcon(self.icon)
+        self.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.setText(f'{self.name.upper()} Informatica Administrator')
+
+    def _load_style_ui(self):
+        self.setStyleSheet(f"#{self.objectName()}"
+                           "{\n"
+                           "    border: 1px solid rgb(167, 167, 167);\n"
+                           "    background: rgb(242, 242, 242);\n"
+                           "    padding: 5px;\n"
+                           "    font-size: 11px;\n"
+                           "    border-radius: 3px;\n"
+                           "}\n"
+                           f"#{self.objectName()}:hover"
+                           "{\n"
+                           "    background-color: rgba(200, 200, 200, 128);\n"
+                           "}\n"
+                           f"#{self.objectName()}:pressed"
+                           "{\n"
+                           "    background-color: rgba(255, 255, 255, 128);\n"
+                           "}")
+
+    def _connect_event(self):
+        if self.event_click:
+            self.clicked.connect(self.event_click)
