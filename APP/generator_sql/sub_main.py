@@ -164,10 +164,9 @@ class UiSQLSubForm(QWidget):
 
     def sql_run(self):
         sql_query = self.get_sql_text()
-        dialog = UiDialogSQLRun(self, sql_query, self.main_window)
+        dialog = UiDialogSQLRun(self, sql_query, self.main_window, self.sql_data_object)
         dialog.setModal(True)
         dialog.exec()
-
 
     def get_sql_text(self):
         sql_object = self.sql_data_object
@@ -280,3 +279,4 @@ class UiSQLSubForm(QWidget):
         if result == 1:
             pyperclip.copy(md5_text)
             self.main_window.statusbar.showMessage(f"MD5 - скопирован", 5000)
+

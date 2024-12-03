@@ -1,4 +1,6 @@
+import pyperclip
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import QFileDialog
 
 from APP.generator_sql.UI.buttons import UiButtonsTest, UiButtonsSave, UiButtonsRun, UiButtonsCopy
 from APP.generator_sql.UI.inputs import UiLineEdit, UiTextEdit
@@ -39,11 +41,12 @@ class UiDialogViewText(QtWidgets.QDialog):
 
 
 class UiDialogSQLRun(QtWidgets.QDialog):
-    def __init__(self, parent=None, sql_query="", main_window=None):
+    def __init__(self, parent=None, sql_query="", main_window=None, sql_data_object=None):
         super(UiDialogSQLRun, self).__init__(parent)
 
         self.app = main_window.app
         self.main_window = main_window
+        self.sql_data_object = sql_data_object
         self.sql_connect = SQLConnect(path=self.app.settings.dir_udata)
         self.sql_query = sql_query
         self.sql_connect_status = False
@@ -189,7 +192,7 @@ class UiDialogSQLRun(QtWidgets.QDialog):
         self.verticalLayout_3.setSpacing(5)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
 
-        self.text_edit_query = UiTextEdit(self.frame_2_query, name='query', read_only=True)
+        self.text_edit_query = UiTextEdit(self.frame_2_query, name='query', read_only=False)
         self.verticalLayout_3.addWidget(self.text_edit_query)
 
         self.frame_query_btn = UiFrame(self.frame_2_query, name='query_btn', border=False)
@@ -264,6 +267,8 @@ class UiDialogSQLRun(QtWidgets.QDialog):
         self.edit_server.textChanged.connect(self.change_event_edit_server)
         self.edit_db.textChanged.connect(self.change_event_edit_db)
 
+        self.text_edit_query.textChanged.connect(self.change_event_text_query)
+
         self.btn_test.clicked.connect(self.clicked_event_btn_test_connect)
         self.btn_save.clicked.connect(self.clicked_event_btn_save_sql)
         self.btn_run.clicked.connect(self.clicked_event_btn_run)
@@ -284,6 +289,9 @@ class UiDialogSQLRun(QtWidgets.QDialog):
 
     def change_event_edit_db(self):
         self.sql_connect.set_database(self.edit_db.text())
+
+    def change_event_text_query(self):
+        self.sql_query = self.text_edit_query.toPlainText()
 
     def clicked_event_btn_test_connect(self):
         self.set_connect_status(False)
@@ -345,10 +353,14 @@ class UiDialogSQLRun(QtWidgets.QDialog):
             cursor = conn.cursor()
 
             try:
-                result = cursor.execute(self.sql_query)
+                result = cursor.execute(self.sql_query.strip())
                 conn.commit()  # Фиксируем изменения
+                for mes in result.messages:
+                    if len(mes) > 1:
+                        text = mes[1].replace('[Microsoft][ODBC SQL Server Driver][SQL Server]', '')
+                        self.text_edit_result.append(text.strip())
                 self.main_window.statusbar.showMessage("Запрос выполнен", 5000)
-                # self.text_edit_result.setText(result.)
+
             except Exception as e:
                 conn.rollback()  # Отменяем изменения при ошибке
                 self.text_edit_result.setText(f"Произошла ошибка: {e}")
@@ -357,7 +369,20 @@ class UiDialogSQLRun(QtWidgets.QDialog):
                 conn.close()
 
     def clicked_event_btn_result_save(self):
-        pass
+        sql_text = self.text_edit_result.toPlainText()
+        default_filename = f"EXEC_{self.sql_data_object.get_file_name()}.sql"
+
+        filename, _ = QFileDialog.getSaveFileName(self.main_window, "Сохранить SQL-скрипт", default_filename,
+                                                  "SQL-script (*.sql);;All Files (*)")
+
+        if filename:
+            try:
+                with open(filename, 'w') as file:
+                    file.write(sql_text)
+                self.main_window.statusbar.showMessage(f"SQL - сохранен. {filename}", 5000)
+            except Exception as e:
+                self.main_window.statusbar.showMessage(f"Save file error: {e}", 5000)
 
     def clicked_event_btn_result_copy(self):
-        pass
+        pyperclip.copy(self.text_edit_result.toPlainText())
+

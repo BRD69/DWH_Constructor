@@ -47,8 +47,16 @@ class UiSubMainWindowCommandInfa(QWidget):
         self._title = title
         self._w = w
         self._h = h
-        self._sql_path_placeholder_text = os.path.join("C:", "SQLAgentJob", "IPC", "bat", "infacmd_proxy.bat")
-        self._infa_path_placeholder_text = os.path.join("C:", "Informatica", "10.4.1", "clients", "DeveloperClient", "infacmd", "infacmd.bat")
+
+        if self.app.settings.platform in self.app.settings.Platforms.windows:
+            self._sql_path_placeholder_text = os.path.join("C:", os.sep, "SQLAgentJob", "IPC", "bat",
+                                                           "infacmd_proxy.bat")
+            self._infa_path_placeholder_text = os.path.join("C:", os.sep, "Informatica", "10.4.1", "clients",
+                                                            "DeveloperClient", "infacmd", "infacmd.bat")
+        else:
+            self._sql_path_placeholder_text = os.path.join(os.sep, "SQLAgentJob", "IPC", "bat", "infacmd_proxy.bat")
+            self._infa_path_placeholder_text = os.path.join(os.sep, "Informatica", "10.4.1", "clients",
+                                                            "DeveloperClient", "infacmd", "infacmd.bat")
 
         """ФУНКЦИИ ЗАГРУЗКИ ИНТЕРФЕЙСА И ДАННЫХ"""
         self._setup_ui()
@@ -810,7 +818,7 @@ class UiSubMainWindowCommandInfa(QWidget):
             self.text_edit_output_terminal.append(f'{operation}<-- : {text_command}')
             popen = subprocess.Popen(text_command, stdout=subprocess.PIPE, shell=True)
             for line in popen.stdout.readlines():
-                self.text_edit_output_terminal.append(f'{operation}--> : {line.decode('utf-8').strip()}')
+                self.text_edit_output_terminal.append(f"{operation}--> : {line.decode('utf-8').strip()}")
             popen.stdout.close()
 
     def checking_settings(self):
@@ -881,7 +889,7 @@ class UiSubMainWindowCommandInfa(QWidget):
         # file_filter = "Python (*.py)"
         file_name = QFileDialog.getOpenFileName(self, caption="Открыть файл", filter=file_filter)
         if file_name:
-            self.edit_settings_sql_path.setText(file_name[0])
+            self.edit_settings_sql_path.setText(os.path.normpath(file_name[0]))
             # self.settings_cmd.set_path_sql_agent(file_name[0])
             # self.change_settings_title(True)
 
@@ -894,7 +902,7 @@ class UiSubMainWindowCommandInfa(QWidget):
         # file_filter = "Python (*.py)"
         file_name = QFileDialog.getOpenFileName(self, caption="Открыть файл", filter=file_filter)
         if file_name:
-            self.edit_settings_infa_path.setText(file_name[0])
+            self.edit_settings_infa_path.setText(os.path.normpath(file_name[0]))
             # self.settings_cmd.set_path_informatica(file_name[0])
             # self.change_settings_title(True)
 
