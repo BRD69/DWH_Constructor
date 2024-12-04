@@ -243,3 +243,13 @@ cython_debug/
 /_design/
 /test/
 /tmp/
+/*.spec
+!/build/
+!/build/**
+!/udata/
+/udata/*.ini
+!/settings/
+settings/*.key
+settings/*.txt
+settings/*.ini
+/test.py
