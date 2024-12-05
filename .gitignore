@@ -244,11 +244,11 @@ cython_debug/
 /test/
 /tmp/
 /*.spec
-!/build/
-!/build/**
-!/udata/
+/build/
+/build/**
+/udata/
 /udata/*.ini
-!/settings/
+/settings/
 settings/*.key
 settings/*.txt
 settings/*.ini

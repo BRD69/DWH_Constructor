@@ -40,25 +40,30 @@ class SettingsCMD:
         self.load_command()
 
     def get_encrypted_text(self, text):
-        if text:
-            cipher = Fernet(self._settings.secret_key_byte)
-            text_byte = bytes(text, 'utf-8')
-            encrypted_text = cipher.encrypt(text_byte)
-            return encrypted_text.decode('utf-8')
-        else:
-            return ''
+        try:
+            if text:
+                cipher = Fernet(self._settings.secret_key)
+                text_byte = bytes(text, 'utf-8')
+                encrypted_text = cipher.encrypt(text_byte)
+                return encrypted_text.decode('utf-8')
+            else:
+                return ''
+        except Exception as e:
+            print(str(e))
+            return 'Error pass'
 
     def get_decrypted_text(self, text):
         try:
             if text:
-                cipher = Fernet(self._settings.secret_key_byte)
+                cipher = Fernet(self._settings.secret_key)
                 text_byte = bytes(text, 'utf-8')
                 decrypted_text = cipher.decrypt(text_byte)
                 return decrypted_text.decode('utf-8')
             else:
                 return ''
         except Exception as e:
-            return str(e)
+            print(str(e))
+            return 'Error pass'
 
     def set_path_sql_agent(self, value):
         self.path_sql_agent = value

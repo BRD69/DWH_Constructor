@@ -1,6 +1,11 @@
+import getpass
 import os
 import sys
 from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.backends import default_backend
+from base64 import urlsafe_b64encode
 
 PATH_APP = os.getcwd()
 
@@ -20,13 +25,18 @@ class Settings:
         self.screen_height = 800
         self.title = "Конструктор DWH"
         self.platform = sys.platform
-        self.secret_key_str = ''
-        self.secret_key_byte = b''
+        self.salt_user = getpass.getuser()
+        self.hash_key = ''
+        self.secret_key = ''
         self.test = False
 
         self.create_dir()
         self.is_test()
         self.load_secret_key()
+
+    @staticmethod
+    def remove_non_alphanumeric(text):
+        return ''.join(char for char in text if char.isalnum())
 
     def get_size(self):
         return (self.screen_width, self.screen_height)
@@ -47,11 +57,23 @@ class Settings:
         else:
             self.test = False
 
+    def _secret_key(self):
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=self.salt_user.encode('utf-8'),
+            iterations=100000,
+            backend=default_backend()
+        )
+        self.secret_key = urlsafe_b64encode(kdf.derive(self.hash_key.encode('utf-8')))
+
     def load_secret_key(self):
         if os.path.isfile(os.path.join(self.dir_settings, 'sk.key')):
             file_secret = open(os.path.join(self.dir_settings, 'sk.key'), 'r')
-            self.secret_key_str = file_secret.read()
-            self.secret_key_byte = self.secret_key_str.encode('utf-8')
+            self.salt_user = getpass.getuser()
+            # self.salt_user = 'Test.User'
+            self.hash_key = file_secret.read()
+            self._secret_key()
             file_secret.close()
         else:
             self.save_secret_key()
