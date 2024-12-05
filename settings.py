@@ -25,7 +25,7 @@ class Settings:
         self.screen_height = 800
         self.title = "Конструктор DWH"
         self.platform = sys.platform
-        self.salt_user = getpass.getuser()
+        self.user = getpass.getuser()
         self.hash_key = ''
         self.secret_key = ''
         self.test = False
@@ -61,7 +61,7 @@ class Settings:
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
-            salt=self.salt_user.encode('utf-8'),
+            salt=self.user.encode('utf-8'),
             iterations=100000,
             backend=default_backend()
         )
@@ -70,8 +70,8 @@ class Settings:
     def load_secret_key(self):
         if os.path.isfile(os.path.join(self.dir_settings, 'sk.key')):
             file_secret = open(os.path.join(self.dir_settings, 'sk.key'), 'r')
-            self.salt_user = getpass.getuser()
-            # self.salt_user = 'Test.User'
+            self.user = getpass.getuser()
+            # self.user = 'Test.User'
             self.hash_key = file_secret.read()
             self._secret_key()
             file_secret.close()

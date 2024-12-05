@@ -30,9 +30,9 @@ class SettingsCMD:
 
         self.path_sql_agent = ''
         self.path_informatica = ''
-        self.user_test = ''
+        self.user_test = self._settings.user
         self.password_test = ''
-        self.user_prod = ''
+        self.user_prod = self._settings.user
         self.password_prod = ''
         self.link_adm_infa_test = 'https://spb99-etl-blt:8443/administrator/'
         self.link_adm_infa_prod = 'https://spb99-etl-blp:8443/administrator/'
@@ -184,8 +184,9 @@ class TemplatesCMD:
             f"-DomainName {self.option_dmn}",
             f"-ServiceName {self.option_dis}",
             f"-Application {self.option_app}",
-            f"-un {self.option_user_name}",
-            f"-pd {self.option_user_pass} ",
+            f"-SecurityDomain GAZPROM-NEFT.LOCAL",
+            f"-UserName {self.option_user_name}",
+            f"-Password {self.option_user_pass} ",
             f"-Wait {self.option_wait}",
         )
         self.workflow = (
@@ -196,9 +197,9 @@ class TemplatesCMD:
             f"-Application {self.option_app}",
             f"-Workflow {self.option_wf}",
             f"-ParameterSet {self.option_ps}",
-            f"-sdn Native",
-            f"-un {self.option_user_name}",
-            f"-pd {self.option_user_pass}",
+            f"-SecurityDomain GAZPROM-NEFT.LOCAL",
+            f"-UserName {self.option_user_name}",
+            f"-Password {self.option_user_pass}",
             f"-Wait {self.option_wait}",
         )
 

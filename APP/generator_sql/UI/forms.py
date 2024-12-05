@@ -355,19 +355,23 @@ class UiDialogSQLRun(QtWidgets.QDialog):
             try:
                 result = cursor.execute(self.sql_query.strip())
                 conn.commit()  # Фиксируем изменения
-
-                self.text_edit_result.append(f'--SERVER: {self.sql_connect.server}')
+                self.text_edit_result.append(f'-' * 50)
+                self.text_edit_result.append(f'-- SERVER: {self.sql_connect.server}')
+                self.text_edit_result.append(f'-' * 50)
                 for mes in result.messages:
                     if len(mes) > 1:
                         text = mes[1].replace('[Microsoft][ODBC SQL Server Driver][SQL Server]', '')
                         self.text_edit_result.append(text.strip())
-                self.text_edit_result.append(f'--SERVER: {self.sql_connect.server}')
-
+                self.text_edit_result.append(f'-' * 50)
+                self.text_edit_result.append(f'-- SERVER: {self.sql_connect.server}')
+                self.text_edit_result.append(f'-' * 50)
                 self.main_window.statusbar.showMessage("Запрос выполнен", 5000)
 
             except Exception as e:
                 conn.rollback()  # Отменяем изменения при ошибке
                 self.text_edit_result.setText(f"Произошла ошибка: {e}")
+                self.text_edit_result.append(f'-- SERVER: {self.sql_connect.server}')
+                self.text_edit_result.append(f'-' * 50)
             finally:
                 cursor.close()
                 conn.close()
