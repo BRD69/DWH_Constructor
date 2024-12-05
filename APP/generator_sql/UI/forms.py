@@ -109,7 +109,7 @@ class UiDialogSQLRun(QtWidgets.QDialog):
         self.label_db.setObjectName("label_db")
         self.horizontalLayout_2.addWidget(self.label_db)
 
-        self.edit_db = UiLineEdit(self.frame_2_db, "db")
+        self.edit_db = UiLineEdit(self.frame_2_db, "db", read_only=True)
 
         self.horizontalLayout_2.addWidget(self.edit_db)
         self.verticalLayout.addWidget(self.frame_2_db)
@@ -355,10 +355,14 @@ class UiDialogSQLRun(QtWidgets.QDialog):
             try:
                 result = cursor.execute(self.sql_query.strip())
                 conn.commit()  # Фиксируем изменения
+
+                self.text_edit_result.append(f'--SERVER: {self.sql_connect.server}')
                 for mes in result.messages:
                     if len(mes) > 1:
                         text = mes[1].replace('[Microsoft][ODBC SQL Server Driver][SQL Server]', '')
                         self.text_edit_result.append(text.strip())
+                self.text_edit_result.append(f'--SERVER: {self.sql_connect.server}')
+
                 self.main_window.statusbar.showMessage("Запрос выполнен", 5000)
 
             except Exception as e:

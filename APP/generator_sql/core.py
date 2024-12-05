@@ -209,7 +209,7 @@ class SQLConnect:
         self._saver_loader = None
 
         self.server = ''
-        self.database = ''
+        self.database = 'core_metadata'
         self.driver = 'SQL Server'
         self.trusted_connection = self.get_str_trusted_connection(True)
 
